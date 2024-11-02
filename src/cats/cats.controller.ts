@@ -1,12 +1,15 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
-import { Cat } from './cats.type';
+import { CatsService } from './cats.service';
+import { Cat } from './dto/interfaces/cats.interface';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private catsService: CatsService) {}
+
   @Get()
-  findAll(): string {
-    return `cats route return STATUS:`;
+  findAll(): Cat[] {
+    return this.catsService.findAll();
   }
 
   @Get('get-ab*cd')
@@ -16,15 +19,11 @@ export class CatsController {
 
   @Post()
   createRecord(@Body() createCatDto: CreateCatDto): Cat {
-    console.log(createCatDto);
-    return {
-      id: Date.now().toString(),
-      ...createCatDto,
-    };
+    return this.catsService.create(createCatDto);
   }
 
   @Get(':id')
-  findById(@Param('id') id: string): string {
-    return `cat ID: ${id} found`;
+  findById(@Param('id') id: string): Cat {
+    return this.catsService.findById(id);
   }
 }
