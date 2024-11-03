@@ -1,11 +1,15 @@
-import { z } from 'zod';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export const createCatSchema = z
-  .object({
-    name: z.string(),
-    color: z.string(),
-    passportId: z.string(),
-  })
-  .required();
+export class CreateCatDto {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 
-export type CreateCatDto = z.infer<typeof createCatSchema>;
+  @IsString()
+  @IsNotEmpty()
+  color: string;
+
+  @IsString()
+  @IsNotEmpty()
+  passportId: string;
+}
