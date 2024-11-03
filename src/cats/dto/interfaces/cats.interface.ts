@@ -1,5 +1,5 @@
 export interface Cat {
-  id: string;
+  id: number;
   name: string;
   color: string;
   passportId: string;

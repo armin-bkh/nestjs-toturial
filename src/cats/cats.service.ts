@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Cat } from './dto/interfaces/cats.interface';
 import { CreateCatDto } from './dto/create-cat.dto';
 
@@ -10,15 +10,19 @@ export class CatsService {
     return this.cat;
   }
 
-  findById(id: string) {
+  findById(id: number) {
     const cat = this.cat.find((cat) => cat.id === id);
-    if (!cat) throw new BadRequestException(`cat with ID:${id} not found`);
+    if (!cat)
+      throw new HttpException(
+        `cat with ID:${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
     return cat;
   }
 
   create(cat: CreateCatDto) {
-    const newRecord = {
-      id: Date.now().toString(),
+    const newRecord: Cat = {
+      id: Date.now(),
       ...cat,
     };
     this.cat.push(newRecord);
