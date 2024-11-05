@@ -5,15 +5,16 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './dto/interfaces/cats.interface';
-import { ValidationPipe } from '../validation/validation.services';
 import { AuthGuard } from '../auth/auth.guard';
-import { Roles } from '../auth/role.decorator';
-import { Role } from '../auth/role.enum';
+// import { Roles } from '../auth/role.decorator';
+// import { Role } from '../auth/role.enum';
 
 @Controller('cats')
 @UseGuards(AuthGuard)
@@ -31,9 +32,35 @@ export class CatsController {
   }
 
   @Post()
-  @Roles([Role.Admin])
-  createCat(@Body(new ValidationPipe()) createCatDto: CreateCatDto): Cat {
+  // @Roles([Role.Admin])
+  createCat(
+    @Body(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: false,
+        always: true,
+        groups: ['create'],
+      }),
+    )
+    createCatDto: CreateCatDto,
+  ): Cat {
     return this.catsService.create(createCatDto);
+  }
+
+  @Put(':id')
+  updateCat(
+    @Body(
+      new ValidationPipe({
+        whitelist: false,
+        forbidNonWhitelisted: true,
+        always: true,
+        groups: ['update'],
+      }),
+    )
+    updateCatDto: CreateCatDto,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.catsService.update(updateCatDto, id);
   }
 
   @Get(':id')

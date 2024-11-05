@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCatDto {
   @IsString()
@@ -10,6 +10,7 @@ export class CreateCatDto {
   color: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ groups: ['create'] })
+  @IsEmpty({ groups: ['update'] })
   passportId: string;
 }
