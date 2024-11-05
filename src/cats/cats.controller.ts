@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   UseGuards,
@@ -13,6 +12,8 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
 import { Cat } from './dto/interfaces/cats.interface';
 import { AuthGuard } from '../auth/auth.guard';
+import { ParseIdPipe } from './pips/parseId.pipe';
+import { IdParamDto } from './dto/idParam.dto';
 // import { Roles } from '../auth/role.decorator';
 // import { Role } from '../auth/role.enum';
 
@@ -58,13 +59,21 @@ export class CatsController {
       }),
     )
     updateCatDto: CreateCatDto,
-    @Param('id', ParseIntPipe) id: number,
+    @Param(
+      new ValidationPipe({
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+      }),
+    )
+    { id }: IdParamDto,
   ) {
     return this.catsService.update(updateCatDto, id);
   }
 
   @Get(':id')
-  findById(@Param('id', ParseIntPipe) id: number): Cat {
+  findById(@Param('id') id: number): Cat {
     return this.catsService.findById(id);
   }
 }
