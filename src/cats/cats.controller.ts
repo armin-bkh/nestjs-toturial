@@ -10,12 +10,13 @@ import {
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
-import { Cat } from './interfaces/cats.interface';
+// import { Cat } from './interfaces/cats.interface';
 import { AuthGuard } from '../auth/auth.guard';
 // import { ParseIdPipe } from './pips/parseId.pipe';
 import { IdParamDto } from './dto/idParam.dto';
 import { HeadersDto } from './dto/headers.dto';
 import { RequestHeaders } from './decorators/requestHeaders.decorator';
+import { UpdateCatDto } from './dto/update-cat.dto';
 // import { Roles } from '../auth/role.decorator';
 // import { Role } from '../auth/role.enum';
 
@@ -25,7 +26,7 @@ export class CatsController {
   constructor(private catsService: CatsService) {}
 
   @Get()
-  findAll(): Cat[] {
+  findAll() {
     return this.catsService.findAll();
   }
 
@@ -37,14 +38,7 @@ export class CatsController {
   @Post()
   // @Roles([Role.Admin])
   createCat(
-    @Body(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: false,
-        always: true,
-        groups: ['create'],
-      }),
-    )
+    @Body()
     createCatDto: CreateCatDto,
     @RequestHeaders(
       new ValidationPipe({
@@ -60,30 +54,16 @@ export class CatsController {
 
   @Put(':id')
   updateCat(
-    @Body(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        always: true,
-        groups: ['update'],
-      }),
-    )
-    updateCatDto: CreateCatDto,
-    @Param(
-      new ValidationPipe({
-        transform: true,
-        transformOptions: {
-          enableImplicitConversion: true,
-        },
-      }),
-    )
+    @Body()
+    updateCatDto: UpdateCatDto,
+    @Param()
     { id }: IdParamDto,
   ) {
     return this.catsService.update(updateCatDto, id);
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Cat {
+  findById(@Param('id') id: number) {
     return this.catsService.findById(id);
   }
 }

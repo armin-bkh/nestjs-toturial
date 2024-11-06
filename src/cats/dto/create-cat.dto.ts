@@ -1,16 +1,19 @@
-import { IsEmpty, IsNotEmpty, IsString } from 'class-validator';
+import { IsDefined, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class CreateCatDto {
   @IsString()
-  @IsNotEmpty()
+  @IsDefined()
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsDefined()
   color: string;
 
   @IsString()
-  @IsNotEmpty({ groups: ['create'] })
-  @IsEmpty({ groups: ['update'] })
+  @IsDefined()
   passportId: string;
+
+  @IsInt()
+  @IsOptional()
+  price: number;
 }

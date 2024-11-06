@@ -4,9 +4,11 @@ import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { CatsController } from './cats/cats.controller';
 import { LoggerMiddleware } from './cats/cats.middleware';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { PgConfig } from './database/pg.config';
 
 @Module({
-  imports: [CatsModule],
+  imports: [CatsModule, TypeOrmModule.forRoot(PgConfig)],
   controllers: [AppController],
   providers: [AppService],
 })
