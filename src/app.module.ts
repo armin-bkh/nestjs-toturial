@@ -6,9 +6,10 @@ import { CatsController } from './cats/cats.controller';
 import { LoggerMiddleware } from './cats/cats.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PgConfig } from './database/pg.config';
+import { PropertyModule } from './property/property.module';
 
 @Module({
-  imports: [CatsModule, TypeOrmModule.forRoot(PgConfig)],
+  imports: [CatsModule, TypeOrmModule.forRoot(PgConfig), PropertyModule],
   controllers: [AppController],
   providers: [AppService],
 })
