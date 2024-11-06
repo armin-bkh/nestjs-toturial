@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { PropertyFeature } from './propertyFeature.entity';
 
 @Entity()
 export class Property {
@@ -10,4 +17,11 @@ export class Property {
   description: string;
   @Column({ default: 0 })
   price: number;
+  @OneToOne(
+    () => PropertyFeature,
+    (propertyFeature) => propertyFeature.property,
+    { cascade: true },
+  )
+  @JoinColumn()
+  propertyFeature: PropertyFeature;
 }
