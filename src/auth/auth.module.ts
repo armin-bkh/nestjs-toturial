@@ -8,14 +8,25 @@ import { User } from '../entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user/user.module';
 import { LocalStrategy } from './strategies/local.strategy';
+import { JwtModule } from '@nestjs/jwt';
+import jwtConfig from '../config/jwt.config';
+import { ConfigModule } from '@nestjs/config';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), PassportModule, UserModule],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
+    ConfigModule.forFeature(jwtConfig),
+    PassportModule,
+    UserModule,
+  ],
   controllers: [AuthController],
   providers: [
     AuthService,
     UserService,
     LocalStrategy,
+    JwtStrategy,
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({
