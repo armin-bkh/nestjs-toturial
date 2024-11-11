@@ -1,3 +1,9 @@
+import * as dotenv from 'dotenv';
+import * as dotenvExpand from 'dotenv-expand';
+dotenvExpand.expand(
+  dotenv.config({ path: process.cwd() + '/development.env' }),
+);
+
 import { DataSource, DataSourceOptions } from 'typeorm';
 import dbConfig from '../config/db.config.development';
 import { runSeeders, SeederOptions } from 'typeorm-extension';

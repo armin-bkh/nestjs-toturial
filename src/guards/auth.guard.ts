@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
-import { Roles } from './role.decorator';
-import { Role } from './role.enum';
+import { Roles } from '../decorators/role.decorator';
+import { Role } from '../decorators/role.enum';
 
 function matchRoles(userRole: Role, roles: Role[]) {
   return roles.includes(userRole);

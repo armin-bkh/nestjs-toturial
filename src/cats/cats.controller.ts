@@ -11,7 +11,7 @@ import {
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
 // import { Cat } from './interfaces/cats.interface';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 // import { ParseIdPipe } from './pips/parseId.pipe';
 import { IdParamDto } from './dto/idParam.dto';
 import { HeadersDto } from './dto/headers.dto';

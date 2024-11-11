@@ -8,6 +8,8 @@ import { CatsController } from './cats/cats.controller';
 import { LoggerMiddleware } from './cats/cats.middleware';
 import dbConfigProduction from './config/db.config.production';
 import { PropertyModule } from './property/property.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 import dbConfigDevelopment from './config/db.config.development';
 
 @Module({
@@ -26,6 +28,8 @@ import dbConfigDevelopment from './config/db.config.development';
           : dbConfigDevelopment,
     }),
     PropertyModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
