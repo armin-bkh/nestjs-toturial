@@ -1,4 +1,5 @@
 import {
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -7,10 +8,14 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtSignPayload } from './types/jwt.type';
+import { ConfigType } from '@nestjs/config';
+import refreshJwtConfig from '../config/refresh-jwt.config';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(refreshJwtConfig.KEY)
+    private refreshJwtConfiguration: ConfigType<typeof refreshJwtConfig>,
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
@@ -26,6 +31,26 @@ export class AuthService {
 
   generateJwtToken(userId: number) {
     const signPayload: JwtSignPayload = { sub: userId };
-    return this.jwtService.sign(signPayload);
+    const accessToken = this.jwtService.sign(signPayload);
+    const refreshToken = this.jwtService.sign(
+      signPayload,
+      this.refreshJwtConfiguration,
+    );
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+  regenerateJwtToken(userId: number) {
+    const signPayload: JwtSignPayload = { sub: userId };
+    const accessToken = this.jwtService.sign(signPayload);
+    const refreshToken = this.jwtService.sign(
+      signPayload,
+      this.refreshJwtConfiguration,
+    );
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 }
