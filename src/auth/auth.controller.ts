@@ -3,11 +3,13 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth/refresh-jwt-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
+import { PublicRoute } from './decorators/publicRoute.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @PublicRoute()
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Req() req) {

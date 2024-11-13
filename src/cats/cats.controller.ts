@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
-import { RoleGuard } from '../auth/guards/role-auth/role.guard';
+import { RoleGuard } from '../auth/guards/role/role.guard';
 import { IdParamDto } from './dto/idParam.dto';
 import { HeadersDto } from './dto/headers.dto';
 import { RequestHeaders } from './decorators/requestHeaders.decorator';
