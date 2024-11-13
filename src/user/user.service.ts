@@ -10,9 +10,13 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
+  async updateHashedRefreshToken(id: number, hashedRefreshToken: string) {
+    return await this.userRepository.update({ id }, { hashedRefreshToken });
+  }
+
   async create(createUserDto: CreateUserDto) {
     const user = this.userRepository.create(createUserDto);
-    return this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
 
   async findByEmail(email: string) {
@@ -22,7 +26,19 @@ export class UserService {
   async findById(id: number) {
     return await this.userRepository.findOne({
       where: { id },
-      select: ['firstName', 'lastName', 'email', 'avatarUrl'],
+      select: [
+        'id',
+        'role',
+        'firstName',
+        'lastName',
+        'email',
+        'avatarUrl',
+        'hashedRefreshToken',
+      ],
     });
+  }
+
+  async delete(id: number) {
+    return await this.userRepository.delete(id);
   }
 }

@@ -2,6 +2,7 @@ import { Controller, Post, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth/local-auth.guard';
 import { RefreshJwtAuthGuard } from './guards/refresh-jwt-auth/refresh-jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -9,8 +10,8 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Req() req) {
-    const { accessToken, refreshToken } = this.authService.generateJwtToken(
+  async login(@Req() req) {
+    const { accessToken, refreshToken } = await this.authService.login(
       req.user.id,
     );
     return {
@@ -22,8 +23,8 @@ export class AuthController {
 
   @UseGuards(RefreshJwtAuthGuard)
   @Post('refresh')
-  refreshToken(@Req() req) {
-    const { accessToken, refreshToken } = this.authService.regenerateJwtToken(
+  async refreshToken(@Req() req) {
+    const { accessToken, refreshToken } = await this.authService.refreshToken(
       req.user.id,
     );
     return {
@@ -31,5 +32,11 @@ export class AuthController {
       accessToken,
       refreshToken,
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('signout')
+  async signOut(@Req() req) {
+    await this.authService.signOut(req.user.id);
   }
 }

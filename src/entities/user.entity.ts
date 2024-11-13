@@ -10,11 +10,18 @@ import {
 } from 'typeorm';
 import { Property } from './property.entity';
 import * as bcrypt from 'bcrypt';
+import { Role } from '../auth/types/role.enum';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.User,
+  })
+  role: Role;
   @Column()
   firstName: string;
   @Column()
@@ -29,10 +36,13 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Property, (property) => property.user)
+  @Column({ nullable: true })
+  hashedRefreshToken: string;
+
+  @OneToMany(() => Property, (property) => property.user, { cascade: true })
   properties: Property[];
 
-  @ManyToMany(() => Property, (property) => property.likedBy)
+  @ManyToMany(() => Property, (property) => property.likedBy, { cascade: true })
   @JoinTable({ name: 'liked_properties' })
   likedProperties: Property[];
 

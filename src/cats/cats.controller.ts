@@ -10,18 +10,14 @@ import {
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
-// import { Cat } from './interfaces/cats.interface';
-import { AuthGuard } from '../guards/auth.guard';
-// import { ParseIdPipe } from './pips/parseId.pipe';
+import { RoleGuard } from '../auth/guards/role-auth/role.guard';
 import { IdParamDto } from './dto/idParam.dto';
 import { HeadersDto } from './dto/headers.dto';
 import { RequestHeaders } from './decorators/requestHeaders.decorator';
 import { UpdateCatDto } from './dto/update-cat.dto';
-// import { Roles } from '../auth/role.decorator';
-// import { Role } from '../auth/role.enum';
 
 @Controller('cats')
-@UseGuards(AuthGuard)
+@UseGuards(RoleGuard)
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
