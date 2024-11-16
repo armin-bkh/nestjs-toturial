@@ -11,6 +11,8 @@ import { JwtSignPayload } from './types/jwt.type';
 import { ConfigType } from '@nestjs/config';
 import refreshJwtConfig from '../config/refresh-jwt.config';
 import * as argon2 from 'argon2';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { use } from 'passport';
 
 @Injectable()
 export class AuthService {
@@ -86,6 +88,12 @@ export class AuthService {
   async validateJwtUser(userId: number) {
     const user = await this.userService.findById(userId);
     return { id: user.id, role: user.role };
+  }
+
+  async validateGoogleUser(googleUser: CreateUserDto) {
+    const user = await this.userService.findByEmail(googleUser.email);
+    if (user) return user;
+    return this.userService.create(googleUser);
   }
 
   async signOut(userId: number) {

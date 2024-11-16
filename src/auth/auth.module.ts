@@ -16,6 +16,8 @@ import refreshJwtConfig from '../config/refresh-jwt.config';
 import { RefreshJwtStrategy } from './strategies/refresh-jwt.strategy';
 import { RoleGuard } from './guards/role/role.guard';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
+import googleOauthConfig from '../config/google-oauth.config';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     ConfigModule.forFeature(refreshJwtConfig),
+    ConfigModule.forFeature(googleOauthConfig),
     PassportModule,
     UserModule,
   ],
@@ -33,6 +36,7 @@ import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
     LocalStrategy,
     JwtStrategy,
     RefreshJwtStrategy,
+    GoogleStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
